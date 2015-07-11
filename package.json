@@ -1,0 +1,22 @@
+{
+  "name": "express-noodles",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Sam Enoka",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.3.2",
+    "express": "^4.13.0",
+    "redis": "^0.12.1",
+    "request": "^2.58.0",
+    "socket.io": "^1.3.5"
+  },
+  "engines": {
+    "node": "0.10.34"
+  }
+}
