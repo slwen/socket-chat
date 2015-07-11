@@ -1,8 +1,11 @@
 var express     = require('express');
 var request     = require('request');
 var url         = require('url');
+
 var redis       = require('redis');
-var redisClient = redis.createClient();
+var redisURL    = url.parse(process.env.REDIS_URL);
+var redisClient = redis.createClient(redisURL.port, redisURL.hostname);
+
 var app         = express();
 var server      = require('http').createServer(app);
 var io          = require('socket.io')(server);
