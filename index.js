@@ -1,9 +1,8 @@
+"use strict";
+
 var express     = require('express');
 var request     = require('request');
 var url         = require('url');
-
-
-// var redis       = require('redis');
 
 if (process.env.REDISTOGO_URL) {
   var rtg = url.parse(process.env.REDISTOGO_URL);
@@ -12,8 +11,6 @@ if (process.env.REDISTOGO_URL) {
 } else {
   var redis = require("redis").createClient();
 }
-
-// var redisClient = redis.createClient();
 
 var app         = express();
 var server      = require('http').createServer(app);
