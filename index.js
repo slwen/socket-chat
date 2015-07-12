@@ -1,7 +1,6 @@
 "use strict";
 
 var express = require('express');
-var request = require('request');
 var url     = require('url');
 var app     = express();
 var server  = require('http').createServer(app);
