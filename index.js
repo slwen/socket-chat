@@ -1,8 +1,12 @@
 "use strict";
 
-var express     = require('express');
-var request     = require('request');
-var url         = require('url');
+var express = require('express');
+var request = require('request');
+var url     = require('url');
+var app     = express();
+var server  = require('http').createServer(app);
+var io      = require('socket.io')(server);
+var PORT    = process.env.PORT || 8080;
 
 if (process.env.REDISTOGO_URL) {
   var rtg = url.parse(process.env.REDISTOGO_URL);
@@ -11,10 +15,6 @@ if (process.env.REDISTOGO_URL) {
 } else {
   var redis = require("redis").createClient();
 }
-
-var app         = express();
-var server      = require('http').createServer(app);
-var io          = require('socket.io')(server);
 
 var storeMessage = function(name, data) {
   var message = JSON.stringify({ name: name, data: data });
@@ -62,7 +62,8 @@ io.on('connection', function(client) {
 });
 
 app.get('/', function(req, res) {
-  res.sendFile(__dirname + "/index.html");
+  res.locals = { port: PORT };
+  res.render('chat.ejs');
 });
 
 app.get('/pages/:campaign_id', function(req, response) {
@@ -99,4 +100,4 @@ app.get('/quotes/:name', function(request, response) {
   response.end();
 });
 
-server.listen(process.env.PORT || 8080);
+server.listen(PORT);
