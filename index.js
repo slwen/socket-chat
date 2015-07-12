@@ -62,42 +62,7 @@ io.on('connection', function(client) {
 });
 
 app.get('/', function(req, res) {
-  res.locals = { port: PORT };
   res.render('chat.ejs');
-});
-
-app.get('/pages/:campaign_id', function(req, response) {
-  var uid = req.params.campaign_id;
-
-  var options = {
-    protocol: 'http:',
-    host: 'everydayhero.com',
-    pathname: '/api/v2/pages.json',
-    query: { campaign_id: uid, limit: 5, page: 1 }
-  };
-
-  var pagesUrl = url.format(options);
-
-  request(pagesUrl, function(err, res, body) {
-    var data = JSON.parse(body);
-    response.locals = { data: data };
-    response.render('pages.ejs');
-  });
-});
-
-var quotes = {
-  'einstein': 'Life is like riding a bicycle. To keep your balance you must keep moving',
-  'berners-lee': 'The Web does not just connect machines, it connects people',
-  'crockford': 'The good thing about reinventing the wheel is that you can get a round one',
-  'hofstadter': 'Which statement seems more true: (1) I have a brain. (2) I am a brain.'
-};
-
-app.get('/quotes/:name', function(request, response) {
-  var quote = quotes[request.params.name];
-
-  response.writeHead(200);
-  response.write(quote);
-  response.end();
 });
 
 server.listen(PORT);
