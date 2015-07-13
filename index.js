@@ -1,11 +1,12 @@
 "use strict";
 
-var express = require('express');
-var url     = require('url');
-var app     = express();
-var server  = require('http').createServer(app);
-var io      = require('socket.io')(server);
-var PORT    = process.env.PORT || 8080;
+var express      = require('express');
+var sanitizer    = require('sanitizer');
+var url          = require('url');
+var app          = express();
+var server       = require('http').createServer(app);
+var io           = require('socket.io')(server);
+var PORT         = process.env.PORT || 8080;
 
 if (process.env.REDISTOGO_URL) {
   var rtg = url.parse(process.env.REDISTOGO_URL);
@@ -39,6 +40,7 @@ io.on('connection', function(client) {
       messages = messages.reverse();
       messages.forEach(function(message) {
         message = JSON.parse(message);
+        message.data = sanitizer.escape(message.data);
         client.emit('messages', message.name + ': ' + message.data);
       });
     });
