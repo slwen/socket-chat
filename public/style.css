@@ -1,0 +1,21 @@
+html, body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+.chat-box {
+  box-sizing: border-box;
+  height: 300px;
+  overflow-y: scroll;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.message {
+  font-size: 14px;
+  display: block;
+  padding: 10px;
+  border-radius: 6px;
+  margin: 5px;
+  background: #eee;
+}

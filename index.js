@@ -1,12 +1,12 @@
 "use strict";
 
-var express      = require('express');
-var sanitizer    = require('sanitizer');
-var url          = require('url');
-var app          = express();
-var server       = require('http').createServer(app);
-var io           = require('socket.io')(server);
-var PORT         = process.env.PORT || 8080;
+var express   = require('express');
+var sanitizer = require('sanitizer');
+var url       = require('url');
+var app       = express();
+var server    = require('http').createServer(app);
+var io        = require('socket.io')(server);
+var PORT      = process.env.PORT || 8080;
 
 if (process.env.REDISTOGO_URL) {
   var rtg = url.parse(process.env.REDISTOGO_URL);
@@ -16,6 +16,17 @@ if (process.env.REDISTOGO_URL) {
   var redis = require("redis").createClient();
 }
 
+/**
+ * Clear list of chatters on server startup.
+ */
+redis.smembers('chatters', function(err, chatters) {
+  chatters.forEach(function(chatter) {
+    redis.srem('chatters', chatter);
+  });
+});
+
+app.use(express.static('public'));
+
 var storeMessage = function(name, data) {
   var message = JSON.stringify({ name: name, data: data });
   redis.lpush('messages', message, function(err, res) {
@@ -24,9 +35,11 @@ var storeMessage = function(name, data) {
 };
 
 io.on('connection', function(client) {
-  console.log('Client connected...');
+  console.log('Client connecting...');
 
   client.on('join', function(name) {
+    console.log(name + ' connected.');
+
     redis.smembers('names', function(err, names) {
       names.forEach(function(name) {
         client.emit('add chatter', name);
@@ -50,8 +63,12 @@ io.on('connection', function(client) {
 
   client.on('disconnect', function() {
     var name = client.name;
-    client.broadcast.emit('remove chatter', name);
-    redis.srem('chatters', name);
+
+    if (name !== undefined) {
+      client.broadcast.emit('remove chatter', name);
+      console.log(name + ' disconnected.');
+      redis.srem('chatters', name);
+    }
   });
 
   client.on('messages', function(message) {
@@ -66,4 +83,6 @@ app.get('/', function(req, res) {
   res.render('chat.ejs');
 });
 
-server.listen(PORT);
+server.listen(PORT, function() {
+  console.log('Listening on port ' + PORT);
+});
