@@ -1,5 +1,5 @@
 (function() {
-  var server = io.connect("//localhost:8080");
+  var server = io.connect(window.location.hostname);
 
   var insertMessage = function(data) {
     var html = '<div class="message">' + data + '</div>';
