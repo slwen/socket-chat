@@ -5,15 +5,6 @@ var io        = require('socket.io')(server);
 var messages  = require('./models/messages');
 var users     = require('./models/users');
 
-/**
- * Clear list of chatters on server startup.
- */
-// redis.smembers('chatters', function(err, chatters) {
-//   chatters.forEach(function(chatter) {
-//     redis.srem('chatters', chatter);
-//   });
-// });
-
 module.exports = function() {
   io.on('connection', function(client) {
     console.log('Client connecting...');
