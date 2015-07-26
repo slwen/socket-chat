@@ -25,3 +25,9 @@ $ redis-server
 ```sh
 $ npm start
 ```
+
+#### Run tests
+
+```sh
+$ npm test
+```
