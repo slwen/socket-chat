@@ -26,6 +26,7 @@ exports.fetchAll = function(callback) {
     return callback(
       _.map(messages, function(message) {
         message = JSON.parse(message);
+        message.name = sanitizer.escape(message.name);
         message.data = sanitizer.escape(message.data);
         return message;
       })

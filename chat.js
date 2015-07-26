@@ -1,9 +1,9 @@
 "use strict";
 
-var server    = require('./app');
-var io        = require('socket.io')(server);
-var messages  = require('./models/messages');
-var users     = require('./models/users');
+var server   = require('./app');
+var io       = require('socket.io')(server);
+var messages = require('./models/messages');
+var users    = require('./models/users');
 
 module.exports = function() {
   io.on('connection', function(client) {
