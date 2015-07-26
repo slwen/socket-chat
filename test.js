@@ -1,0 +1,38 @@
+"use strict";
+
+var mocha  = require('mocha');
+var should = require('should');
+var io     = require('socket.io-client');
+
+var socketUrl = "http://localhost:8080";
+var options = {
+  transports: ['websocket'],
+  'force new connection': true
+};
+
+var chatUser1 = { name: "Huey" };
+var chatUser2 = { name: "Dewey" };
+var chatUser3 = { name: "Louie" };
+
+describe('chat server', function() {
+  it('Should broadcast new users joining the server', function(done) {
+
+    var client1 = io.connect(socketUrl, options);
+    var client2 = io.connect(socketUrl, options);
+
+    client1.on('connect', function(data) {
+      client1.emit('join', chatUser1.name);
+
+      client2.on('connect', function(data) {
+        client2.emit('join', chatUser2.name);
+      });
+
+      client1.on('add chatter', function(name) {
+        name.should.equal("Dewey");
+        client2.disconnect();
+        client1.disconnect();
+        done();
+      });
+    });
+  });
+});
