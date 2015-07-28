@@ -50,9 +50,29 @@ describe('chat server', function() {
         client2.emit('join', chatUser2.name);
       });
 
-      client1.on('add chatter', function(name) {
+      client1.on('addUser', function(name) {
         name.should.equal("Dewey");
         client2.disconnect();
+        client1.disconnect();
+        done();
+      });
+    });
+  });
+
+  it('Should broadcast when a user disconnects from the server', function(done) {
+    var client1 = io.connect(socketUrl, options);
+    var client2 = io.connect(socketUrl, options);
+
+    client1.on('connect', function(data) {
+      client1.emit('join', chatUser1.name);
+
+      client2.on('connect', function(data) {
+        client2.emit('join', chatUser3.name);
+        client2.disconnect();
+      });
+
+      client1.on('removeUser', function(name) {
+        name.should.equal("Louie");
         client1.disconnect();
         done();
       });
