@@ -3,17 +3,17 @@
 var redis = require('../lib/redis');
 
 /**
- * Add a user to list of online chatters.
+ * Add a user to list of online users.
  */
 exports.add = function(name) {
-  return redis.sadd('chatters', name);
+  return redis.sadd('users', name);
 };
 
 /**
- * Remove a user from list of online chatters.
+ * Remove a user from list of online users.
  */
 exports.remove = function(name) {
-  return redis.srem('chatters', name);
+  return redis.srem('users', name);
 };
 
 /**

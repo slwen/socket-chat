@@ -17,14 +17,14 @@ module.exports = function() {
        */
       users.fetchOnline(function(names) {
         names.forEach(function(name) {
-          client.emit('add chatter', name);
+          client.emit('addUser', name);
         });
       });
 
       /**
        * Broadcast to all clients that a new user has joined.
        */
-      client.broadcast.emit('add chatter', name);
+      client.broadcast.emit('addUser', name);
       users.add(name);
 
       /**
@@ -43,7 +43,7 @@ module.exports = function() {
       var name = client.name;
 
       if (name !== undefined) {
-        client.broadcast.emit('remove chatter', name);
+        client.broadcast.emit('removeUser', name);
         console.log(name + ' disconnected.');
         users.remove(name);
       }

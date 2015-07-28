@@ -1,5 +1,5 @@
 (function() {
-  var server = io.connect(window.location.hostname);
+  var server = io.connect('http://localhost:8080');
 
   var insertMessage = function(data) {
     var html = '<div class="message">' + data + '</div>';
@@ -11,13 +11,13 @@
     server.emit('join', nickname);
   });
 
-  server.on('add chatter', function(name) {
-    var chatter = '<span class="chatter" data-name="' + name + '">' + name + '</span>';
-    $('#chatters').append(chatter);
+  server.on('addUser', function(name) {
+    var user = '<span class="user" data-name="' + name + '">' + name + '</span>';
+    $('#users').append(user);
   });
 
-  server.on('remove chatter', function(name) {
-    $('.chatter[data-name=' + name + ']').remove();
+  server.on('removeUser', function(name) {
+    $('.user[data-name=' + name + ']').remove();
   });
 
   $('.chat-form').submit(function(e) {
